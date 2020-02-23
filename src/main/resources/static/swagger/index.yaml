@@ -1,0 +1,263 @@
+swagger: '2.0'
+info:
+  description: ymd-rest-api项目是优买单app前置接口项目
+  version: 1.0.1
+  title: 优买单API接口
+
+basePath: /ymd-rest-api
+
+schemes:
+  - http
+
+#认证
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "token"
+    in: "header"
+
+#定义接口数据
+paths:
+  /captcha.jpg:
+    get:
+      tags:
+        - 用户登录
+      summary: 获取验证码
+      produces:
+        - application/octet-stream
+      parameters:
+        - name: uuid
+          description: UUID
+          in: query
+          type: string
+          required: true
+  /sys/login:
+    post:
+      tags:
+        - 用户登录
+      summary: 用户登录
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 管理员对象
+          in: body
+          type: string
+          schema:
+            $ref: '#/definitions/LoginForm'
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Login'
+
+  /app/ymdBroadcastPic/list:
+    post:
+      tags:
+      - 轮播图管理
+      summary: 轮播图信息
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: 返回一个轮播图对象集合
+          schema:
+            type: object
+            properties:
+              code:
+                description: 状态码 0：成功  非0：失败
+                type: integer
+                format: int32
+              ybpList:
+                type: array
+                items: '#/definitions/ymdBroadcastPic'
+  /app/ymdGesture/add:
+    post:
+      tags:
+      - 手势密码添加
+      description: 给会员添加手势密码
+    #请求参数
+    parameters:
+    #参数key
+    - name: ymdConsumer
+      #传递方法，formData表示表单传输，还有query表示url拼接传输，path表示作为url的一部分
+      #body表示http头承载参数(body只能有一个,有body不能在有其他的)
+      in: body
+      #参数描述
+      description: 手势密码
+      #参数是否必要，默认false
+      required: true
+      #参数类型，可选的包括array,integer,boolean,string.使用array必须使用items
+      type: string
+    responses:
+      '200':
+        description: 返回状态码
+        schema:
+          type: object
+          properties:
+            code:
+              description: 状态码 0：成功  非0：失败
+              type: integer
+              format: int32
+  /app/ymdGesture/unlock:
+    post:
+      tags:
+      - 手势密码解锁
+      description: 解锁手势密码
+    #请求参数
+    parameters:
+    #参数key
+    - name: ymdConsumer
+      #传递方法，formData表示表单传输，还有query表示url拼接传输，path表示作为url的一部分
+      #body表示http头承载参数(body只能有一个,有body不能在有其他的)
+      in: body
+      #参数描述
+      description: 手势密码
+      #参数是否必要，默认false
+      required: true
+      #参数类型，可选的包括array,integer,boolean,string.使用array必须使用items
+      type: string
+    responses:
+      '200':
+        description: 返回状态码
+        schema:
+          type: object
+          properties:
+            code:
+              description: 状态码 0：成功  非0：失败
+              type: integer
+              format: int32
+            ymdGesture:
+              type: object
+              items:
+                #引用在definitions下定义的ymdGesture
+                $ref: '#/definitions/ymdGesture'
+  /app/ymdIndustry/list:
+    post:
+      tags:
+      - 商户类别管理
+      summary: 商户类别信息
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: 返回一个商户类别对象集合
+          schema:
+            type: object
+            properties:
+              code:
+                description: 状态码 0：成功  非0：失败
+                type: integer
+                format: int32
+              yiList:
+                type: array
+                items: '#/definitions/ymdIndustry'
+  /app/ymdConsumer/addConsumer:
+    post:
+      tags:
+      - 会员管理
+      summary: 添加会员
+      produces:
+      - application/json
+      parameters:
+      - name: ymdConsumer
+        description: 会员对象
+        in: body
+      responses:
+        '200':
+          description: 返回状态
+          schema:
+            items: '#/definitions/R'
+  /app/ymdConsumer/updatePassword:
+    post:
+      tags:
+      - 会员管理
+      summary: 修改会员密码
+      produces:
+      - application/json
+      parameters:
+      - name: consumer
+        description: 会员对象
+        in: body
+      responses:
+        '200':
+          description: 返回状态
+          schema:
+            items: '#/definitions/R'
+  /app/yzm/getYzm:
+    post:
+      tags:
+      - 验证码
+      summary: 获取验证码
+      produces:
+      - application/json
+      parameters:
+      - name: phone
+        description: 手机号
+        in: body
+      responses:
+        '200':
+          description: 返回状态
+          schema:
+            items: '#/definitions/R'
+  /app/ymdConsumer/login:
+    post:
+      tags:
+      - 用户登录
+      summary: 登录
+      produces:
+      - application/json
+      parameters:
+      - name: login
+        description: 登录对象
+        in: body
+      responses:
+        '200':
+          description: 返回状态
+          schema:
+            items: '#/definitions/R'
+#定义数据模型
+definitions:
+  R:
+      type: object
+      properties:
+        code:
+          description: 状态码 0：成功  非0：失败
+          type: integer
+          format: int32
+        msg:
+          description: 失败原因
+          type: string
+  ymdBroadcastPic:
+      type: object
+      properties :
+        name:
+          type : string
+          description: 图片名称
+        url:
+          type: string
+          description: 图片路径
+        page:
+          type: string
+          description: 图片链接的网址
+        weight:
+          type: string
+          description: 展示权重
+  ymdIndustry:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 商户类别名称
+        imgUrl:
+          type: string
+          description: 商户类别图片路径
+  ymdGesture:
+      type: object
+      properties:
+        errorNumber:
+          type: integer
+          description: 手势密码错误次数
+        lockTime:
+          type: integer
+          description: 锁定时间

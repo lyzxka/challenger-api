@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.app.dao.AreaDao" >
+    <!-- 这儿定义一个resultMap -->
+    <resultMap type="io.renren.app.entity.Area" id="AreaMap">
+        <result property="parentId" column="parent_id"/>
+        <result property="areaId" column="area_id"/>
+        <result property="areaName" column="area_name"/>
+    </resultMap>
+
+    <select id="selectAllProvince" resultMap="AreaMap" >
+        SELECT * FROM area_ls WHERE parent_id is NULL ORDER BY area_id
+    </select>
+
+    <select id="selectCityByParentId" resultMap="AreaMap" parameterType="java.lang.String">
+        SELECT * FROM area_ls WHERE parent_id =#{_parameter} ORDER BY area_id
+    </select>
+
+    <select id="selectAreaById" resultMap="AreaMap" parameterType="java.lang.String">
+        SELECT * FROM area_ls WHERE area_id =#{_parameter}
+    </select>
+
+</mapper>
