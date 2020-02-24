@@ -52,6 +52,9 @@
             max-idle: 10      # 连接池中的最大空闲连接
             min-idle: 5       # 连接池中的最小空闲连接
 
+# 测试挡板
+switch:
+    flag: true
 
 #日志
 logging:

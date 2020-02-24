@@ -43,7 +43,7 @@ public class BaseController {
     private R getYzmCode(@RequestBody PhoneForm form){
         log.info("获取验证码：{}",form.getPhone());
         String code= RandomUtil.randomNumbers(6);
-        if(Boolean.valueOf(flag)){
+        if(!Boolean.valueOf(flag)){
             //TODO  发短信
         }else{
             code="123456";

@@ -1,5 +1,6 @@
 package io.renren.app.controller;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.renren.app.annotation.Login;
 import io.renren.app.entity.ChUser;
@@ -16,7 +17,6 @@ import io.renren.common.utils.RedisUtils;
 import io.renren.common.validator.ValidatorUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * auther: zzxka
  * date: 2020/2/23
  * description:
  */
-@Api(tags = "登录")
+@Api(tags = "用户操作")
 @RestController
 @RequestMapping("/app/auth/")
 public class AuthController {
@@ -85,10 +87,12 @@ public class AuthController {
         }
         user=new ChUser();
         user.setPhone(form.getPhone());
-        String salt=RandomStringUtils.random(5);
+        String salt= RandomUtil.randomString("abcdefghijklmnopqrstuvwxyz1234567890",5);
         String password=Md5Utils.md5(form.getPassword()+salt,"utf-8");
         user.setPassword(password);
         user.setSalt(salt);
+        user.setDelFlag(0);
+        user.setCreateDate(new Date());
         userService.save(user);
         return R.ok();
     }
@@ -132,7 +136,7 @@ public class AuthController {
         if(StringUtils.equals(newPassword,user.getPassword())){
             return R.error("新旧密码不能一致");
         }
-        String salt=RandomStringUtils.random(5);
+        String salt= RandomUtil.randomString("abcdefghijklmnopqrstuvwxyz1234567890",5);
         String password=Md5Utils.md5(form.getNewPass()+salt,"utf-8");
         user.setPassword(password);
         user.setSalt(salt);
@@ -156,7 +160,7 @@ public class AuthController {
         if(!StringUtils.equals(code,form.getCode())){
             return R.error("短信验证码不正确");
         }
-        String salt=RandomStringUtils.random(5);
+        String salt= RandomUtil.randomString("abcdefghijklmnopqrstuvwxyz1234567890",5);
         String password=Md5Utils.md5(Constants.DEFAULT_PASSWORD +salt,"utf-8");
         user.setPassword(password);
         user.setSalt(salt);
