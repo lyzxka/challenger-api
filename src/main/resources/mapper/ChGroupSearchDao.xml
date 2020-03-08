@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.renren.app.dao.ChGroupSearchDao">
-
+    <select id="selectGroupSearchForPage" resultType="io.renren.app.entity.vo.GroupSearchListVO" parameterType="java.util.Map">
+        select
+          gs.*,
+          u.name as userName,
+          u.icon as userIcon,
+          m.title as matchName
+        from ch_group_search as gs
+        left join ch_group as g on g.id=gs.group_id
+        left join ch_user as u on u.id =g.user_id
+        left join ch_match as m on m.id=gs.match_id
+        left  join ch_category as c on c.id=gs.category_id
+        <if test="param.matchName !=null and param.matchName !=''">
+            and  m.title like concat('%',#{param.matchName},'%')
+        </if>
+        <if test="param.categoryId !=null and param.categoryId !=''">
+            and gs.category_id =#{param.categoryId}
+        </if>
+        order by gs.create_date desc
+    </select>
 
 </mapper>

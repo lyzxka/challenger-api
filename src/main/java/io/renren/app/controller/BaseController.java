@@ -2,9 +2,15 @@ package io.renren.app.controller;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.renren.app.entity.ChCategory;
+import io.renren.app.entity.ChMatch;
+import io.renren.app.entity.vo.GroupSearchListVO;
 import io.renren.app.form.PhoneForm;
 import io.renren.app.service.ChCategoryService;
+import io.renren.app.service.ChGroupSearchService;
+import io.renren.app.service.ChMatchService;
 import io.renren.common.utils.R;
 import io.renren.common.utils.RedisUtils;
 import io.swagger.annotations.Api;
@@ -18,7 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.crypto.Data;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * auther: zzxka
@@ -44,6 +53,10 @@ public class BaseController {
     RedisUtils redisUtils;
     @Autowired
     ChCategoryService categoryService;
+    @Autowired
+    ChMatchService matchService;
+    @Autowired
+    ChGroupSearchService groupSearchService;
 
     @ApiOperation("获取短信验证码")
     @PostMapping("getYZM")
@@ -65,5 +78,20 @@ public class BaseController {
         log.info("门类列表");
         List<ChCategory> list=categoryService.list(new QueryWrapper<ChCategory>().eq("del_flag",false));
         return R.ok().put("data",list);
+    }
+
+    @PostMapping("index")
+    @ApiOperation("首页")
+    public R index(){
+        log.info("首页");
+        Map data=new HashMap();
+        QueryWrapper<ChMatch> wrapper=new QueryWrapper<>();
+        wrapper.eq("del_flag",false);
+        wrapper.orderByDesc("create_date");
+        IPage page=matchService.page(new Page< ChMatch >(1,5),wrapper);
+        data.put("matchList",page.getRecords());
+        Page<GroupSearchListVO> groupSearchList=groupSearchService.selectGroupSearchForPage(new Page(1,5),new HashMap());
+        data.put("groupSearchList",groupSearchList.getRecords());
+        return R.ok(data);
     }
 }

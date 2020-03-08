@@ -42,7 +42,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
 
         //获取用户凭证
-        String token = request.getHeader(jwtUtils.getHeader());
+        String token = request.getHeader("authorization");
         if(StringUtils.isBlank(token)){
             token = request.getParameter(jwtUtils.getHeader());
         }

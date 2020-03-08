@@ -45,7 +45,7 @@ public class MatchController {
     @ApiOperation("比赛列表")
     @PostMapping("list")
     public R list(@RequestBody MatchListForm form){
-        log.info("比赛列表:{}",form.toString());
+        log.info("比赛列表:{},{},{}",form.toString(),form.getPage(),form.getLimit());
         QueryWrapper<ChMatch> wrapper=new QueryWrapper<>();
         wrapper.eq("del_flag",false);
         if(!form.getCategoryId().equals(0L)) {
@@ -63,11 +63,13 @@ public class MatchController {
         ChMatch match=matchService.getById(form.getObjectId());
         if(null==match){
             return R.error("比赛详情不存在");
-        }
+    }
         ChCategory chCategory=categoryService.getById(match.getCategoryId());
         if(null==chCategory){
             return R.error("门类信息不存在");
         }
+        match.setViews(match.getViews()+1);
+        matchService.updateById(match);
         return R.ok().put("match",match).put("category",chCategory.getCategoryName());
     }
 
