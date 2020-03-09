@@ -55,21 +55,21 @@ public class QiniuFileUtil {
             byte[] data = file.getBytes();
             QETag tag = new QETag();
             String hash = tag.calcETag(file);
-            Rescource rescource = rescourceService.selectRescourceByHash(hash);
+            /*Rescource rescource = rescourceService.selectRescourceByHash(hash);
             if (rescource != null) {
                 return rescource.getWebUrl();
-            }
+            }*/
             Response r = uploadManager.put(data, fileName, token);
             if (r.isOK()) {
                 filePath = map.get("path") + fileName;
-                rescource = new Rescource();
+                /*rescource = new Rescource();
                 rescource.setFileName(fileName);
                 rescource.setFileSize(new java.text.DecimalFormat("#.##").format(file.getSize() / 1024) + "kb");
                 rescource.setHash(hash);
                 rescource.setFileType(StringUtils.isBlank(extName) ? "unknown" : extName);
                 rescource.setWebUrl(filePath);
                 rescource.setSource("qiniu");
-                rescourceService.save(rescource);
+                rescourceService.save(rescource);*/
             }
         }
         return filePath;

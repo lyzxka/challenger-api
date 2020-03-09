@@ -4,6 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.Maps;
 import io.renren.app.entity.ChCategory;
 import io.renren.app.entity.ChMatch;
 import io.renren.app.entity.vo.GroupSearchListVO;
@@ -11,18 +12,18 @@ import io.renren.app.form.PhoneForm;
 import io.renren.app.service.ChCategoryService;
 import io.renren.app.service.ChGroupSearchService;
 import io.renren.app.service.ChMatchService;
+import io.renren.app.utils.QiniuFileUtil;
 import io.renren.common.utils.R;
 import io.renren.common.utils.RedisUtils;
+import io.renren.config.QiniuConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.crypto.Data;
 import java.util.HashMap;
@@ -48,6 +49,8 @@ public class BaseController {
     //测试挡板
     @Value("${switch.flag}")
     private String flag;
+    @Autowired
+    QiniuConfig qiniuConfig;
 
     @Autowired
     RedisUtils redisUtils;
@@ -70,6 +73,26 @@ public class BaseController {
         }
         redisUtils.set(YZM_KEY+form.getPhone(),code);
         return R.ok();
+    }
+
+
+    @PostMapping("upload")
+    @ApiOperation("上传图片")
+    public R uploadImage(@RequestParam("file") MultipartFile file){
+        log.info("图片上传");
+        if(file == null){
+            return R.error("上传文件为空 ");
+        }
+        Map m = Maps.newHashMap();
+        try {
+            String url =new  QiniuFileUtil().upload(file,qiniuConfig.getQiniu());
+            m.put("url", url);
+            m.put("name", file.getOriginalFilename());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
+        return R.ok(m);
     }
 
     @ApiOperation("门类列表")
