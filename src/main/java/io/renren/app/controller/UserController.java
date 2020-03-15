@@ -41,4 +41,18 @@ public class UserController {
         userService.updateById(user);
         return R.ok();
     }
+
+    @Login
+    @ApiOperation("用户信息==登录")
+    @PostMapping("userInfo")
+    private R userInfo(@RequestAttribute("userId")Long userId){
+        log.info("获取用户信息：{}",userId);
+        ChUser user=userService.getById(userId);
+        if(null==user){
+            return R.error("用户信息不存在");
+        }
+        user.setSalt(null);
+        user.setPassword(null);
+        return R.ok().put("info",user);
+    }
 }

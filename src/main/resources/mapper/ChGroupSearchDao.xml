@@ -12,6 +12,7 @@
         left join ch_user as u on u.id =g.user_id
         left join ch_match as m on m.id=gs.match_id
         left  join ch_category as c on c.id=gs.category_id
+        where gs.del_flag=0
         <if test="param.matchName !=null and param.matchName !=''">
             and  m.title like concat('%',#{param.matchName},'%')
         </if>

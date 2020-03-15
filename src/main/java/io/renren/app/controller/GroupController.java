@@ -47,7 +47,7 @@ public class GroupController {
         if(null!=form.getCategoryId()){
             param.put("categoryId",form.getCategoryId());
         }
-        Page<GroupSearchListVO> page=groupSearchService.selectGroupSearchForPage(new Page(form.getPage(),form.getLimit()),param);
-        return R.ok().put("data",page.getRecords()).put("pages",page.getPages());
+        Page<GroupSearchListVO> page = groupSearchService.selectGroupSearchForPage(new Page(form.getPage(),form.getLimit()),param);
+        return R.ok().put("data", page.getRecords()).put("pages", page.getPages());
     }
 }
