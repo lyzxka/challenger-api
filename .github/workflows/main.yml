@@ -35,19 +35,19 @@ jobs:
       uses: denverdino/acr-login@v0.1.0
       with:
         # Container registry username
-        username: $USERNAME # optional, default is
+        username: 15069115057 # optional, default is
         # Container registry password
-        password: $PASSWORD # optional, default is
+        password: 948264@zZ # optional, default is
         # Access key id
-        access-key-id: $ACCESS_KEY_ID # optional, default is 
+        access-key-id: LTAI4FjLXTNXN864GMpntENj # optional, default is
         # Access key secret
-        access-key-secret: $ACCESS_KEY_SECRET # optional, default is 
+        access-key-secret: yDR2zExDckFbnBgePROQmERrER3GM4 # optional, default is
         # Region id
-        region-id: $REGION_ID # optional, default is cn-hangzhou
+        region-id: cn-beijing # optional, default is cn-hangzhou
         # Registry instance id
-        instance-id: $INSTANCE_ID # optional, default is 
+        instance-id: registry-vpc.cn-beijing.aliyuncs.com # optional, default is
         # Container registry server url
-        login-server: $LOGIN_SERVER # default is 
+        login-server: registry-vpc.cn-beijing.aliyuncs.com/zzxka # default is
     # 打包
     - name: Build
       run: |
