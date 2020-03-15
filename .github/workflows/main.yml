@@ -9,11 +9,10 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
-variables:
+env:
   APP_NAME: challenger-api
-  DOCKER_USER: 15069115057
-  DOCKER_PW: 948264@zZ
+  USERNAME: 15069115057
+  PASSWORD: 948264@zZ
   ACCESS_KEY_ID: LTAI4FjLXTNXN864GMpntENj
   ACCESS_KEY_SECRET: yDR2zExDckFbnBgePROQmERrER3GM4
   REGION_ID: cn-beijing
@@ -36,24 +35,24 @@ jobs:
       uses: denverdino/acr-login@v0.1.0
       with:
         # Container registry username
-        username: ${{DOCKER_USER}} # optional, default is
+        username: $USERNAME # optional, default is
         # Container registry password
-        password: ${{DOCKER_PW}} # optional, default is
+        password: $PASSWORD # optional, default is
         # Access key id
-        access-key-id: ${{ACCESS_KEY_ID}} # optional, default is 
+        access-key-id: $ACCESS_KEY_ID # optional, default is 
         # Access key secret
-        access-key-secret: ${{ACCESS_KEY_SECRET}} # optional, default is 
+        access-key-secret: $ACCESS_KEY_SECRET # optional, default is 
         # Region id
-        region-id: ${{REGION_ID}} # optional, default is cn-hangzhou
+        region-id: $REGION_ID # optional, default is cn-hangzhou
         # Registry instance id
-        instance-id: ${{INSTANCE_ID}} # optional, default is 
+        instance-id: $INSTANCE_ID # optional, default is 
         # Container registry server url
-        login-server: ${{LOGIN_SERVER}} # default is 
+        login-server: $LOGIN_SERVER # default is 
     # 打包
     - name: Build
       run: |
-        docker run -i --rm -v "$(pwd)":/usr/src/"${{APP_NAME}}" -w /usr/src/"${{APP_NAME}}" -v /root/.m2:/root/.m2  maven:3.5.2-jdk-8 mvn -U clean package  -DskipTests -f pom.xml -P test
-        docker build -t "${{INSTANCE_ID}}"/zzxka/"${{APP_NAME}}":latest .
-        docker login "${{INSTANCE_ID}}" -p "${{PASSWORD}}" -u "${{USERNAME}}"
-        docker push "${{INSTANCE_ID}}"/zzxka/"${{APP_NAME}}":latest
-        docker rmi --force `docker images | grep "${{APP_NAME}}" | awk '{print $3}'`
+        docker run -i --rm -v "$(pwd)":/usr/src/"$APP_NAME" -w /usr/src/"$APP_NAME" -v /root/.m2:/root/.m2  maven:3.5.2-jdk-8 mvn -U clean package  -DskipTests -f pom.xml -P test
+        docker build -t "$INSTANCE_ID"/zzxka/"$APP_NAME":latest .
+        docker login "$INSTANCE_ID" -p "$PASSWORD" -u "$USERNAME"
+        docker push "$INSTANCE_ID"/zzxka/"$APP_NAME":latest
+        docker rmi --force `docker images | grep "$APP_NAME" | awk '{print $3}'`
