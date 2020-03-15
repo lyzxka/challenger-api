@@ -12,8 +12,8 @@ on:
 
 variables:
   APP_NAME: challenger-api
-  USERNAME: 15069115057
-  PASSWORD: 948264@zZ
+  DOCKER_USER: 15069115057
+  DOCKER_PW: 948264@zZ
   ACCESS_KEY_ID: LTAI4FjLXTNXN864GMpntENj
   ACCESS_KEY_SECRET: yDR2zExDckFbnBgePROQmERrER3GM4
   REGION_ID: cn-beijing
@@ -36,9 +36,9 @@ jobs:
       uses: denverdino/acr-login@v0.1.0
       with:
         # Container registry username
-        username: ${{USERNAME}} # optional, default is
+        username: ${{DOCKER_USER}} # optional, default is
         # Container registry password
-        password: ${{PASSWORD}} # optional, default is 
+        password: ${{DOCKER_PW}} # optional, default is
         # Access key id
         access-key-id: ${{ACCESS_KEY_ID}} # optional, default is 
         # Access key secret
