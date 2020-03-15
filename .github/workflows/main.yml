@@ -9,7 +9,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-env:
+
+variables:
   APP_NAME: challenger-api
   USERNAME: 15069115057
   PASSWORD: 948264@zZ
@@ -35,7 +36,7 @@ jobs:
       uses: denverdino/acr-login@v0.1.0
       with:
         # Container registry username
-        username: ${{USERNAME}} # optional, default is 
+        username: ${{USERNAME}} # optional, default is
         # Container registry password
         password: ${{PASSWORD}} # optional, default is 
         # Access key id
