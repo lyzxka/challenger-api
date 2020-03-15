@@ -31,23 +31,23 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
       
-    - name: Alibaba Cloud Container Registry (ACR) Login
-      uses: denverdino/acr-login@v0.1.0
-      with:
-        # Container registry username
-        username: 15069115057 # optional, default is
-        # Container registry password
-        password: zzxka1314 # optional, default is
-        # Access key id
-        access-key-id: LTAI4FjLXTNXN864GMpntENj # optional, default is
-        # Access key secret
-        access-key-secret: yDR2zExDckFbnBgePROQmERrER3GM4 # optional, default is
-        # Region id
-        region-id: cn-beijing # optional, default is cn-hangzhou
-        # Registry instance id
-        instance-id: registry-vpc.cn-beijing.aliyuncs.com/zzxka # optional, default is
-        # Container registry server url
-        login-server: registry-vpc.cn-beijing.aliyuncs.com/zzxka # default is
+#    - name: Alibaba Cloud Container Registry (ACR) Login
+#      uses: denverdino/acr-login@v0.1.0
+#      with:
+#        # Container registry username
+#        username: 15069115057 # optional, default is
+#        # Container registry password
+#        password: zzxka1314 # optional, default is
+#        # Access key id
+#        access-key-id: LTAI4FjLXTNXN864GMpntENj # optional, default is
+#        # Access key secret
+#        access-key-secret: yDR2zExDckFbnBgePROQmERrER3GM4 # optional, default is
+#        # Region id
+#        region-id: cn-beijing # optional, default is cn-hangzhou
+#        # Registry instance id
+#        instance-id: registry-vpc.cn-beijing.aliyuncs.com/zzxka # optional, default is
+#        # Container registry server url
+#        login-server: registry-vpc.cn-beijing.aliyuncs.com/zzxka # default is
     # 打包
     - name: Build
       run: |
