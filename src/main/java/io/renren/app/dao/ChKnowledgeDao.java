@@ -1,8 +1,14 @@
 package io.renren.app.dao;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.renren.app.entity.ChKnowledge;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.renren.app.entity.vo.KnowledgeListVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -14,5 +20,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ChKnowledgeDao extends BaseMapper<ChKnowledge> {
-
+    List<KnowledgeListVO> selectKnowledgeForPage(@Param("param") Map map, Page page);
 }

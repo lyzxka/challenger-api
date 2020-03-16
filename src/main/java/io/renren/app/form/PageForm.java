@@ -1,6 +1,7 @@
 package io.renren.app.form;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 
@@ -12,6 +13,8 @@ import lombok.ToString;
 @ApiModel
 @Data
 public class PageForm {
-    private Integer page=1;
-    private Integer limit=10;
+    @ApiModelProperty(example = "1")
+    private Integer page;
+    @ApiModelProperty(example = "10")
+    private Integer limit;
 }

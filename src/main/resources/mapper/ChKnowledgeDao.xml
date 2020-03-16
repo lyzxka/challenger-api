@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.renren.app.dao.ChKnowledgeDao">
-
+    <select id="selectKnowledgeForPage" parameterType="java.util.Map" resultType="io.renren.app.entity.vo.KnowledgeListVO">
+        select
+          k.*,
+          c.category_name as categoryName,
+          u.name as userName
+        from ch_knowledge as k
+        left join ch_category as c on c.id=k.category_id
+        left join ch_user as u on u.id=k.user_id
+        where k.del_flag=0
+        <if test="param.context !=null and param.context !=''">
+            and (
+              c.category_name like concat('%',#{param.context},'%')
+              or u.name like concat('%',#{param.context},'%')
+              or k.title like concat('%',#{param.context},'%')
+            )
+        </if>
+        order by k.create_date desc
+    </select>
 
 </mapper>
