@@ -51,6 +51,15 @@ jobs:
     # 打包
     - name: Build
       run: |
+        sudo mkdir -p /etc/docker
+        sudo tee /etc/docker/daemon.json <<-'EOF'
+        {
+          "registry-mirrors": ["https://iu2szjhh.mirror.aliyuncs.com"]
+        }
+        EOF
+        sudo systemctl daemon-reload
+        sudo systemctl restart docker
+
         echo "$(pwd)"
         docker run -i --rm -v "$(pwd)":/usr/src/"$APP_NAME" -w /usr/src/"$APP_NAME" -v /root/.m2:/root/.m2  maven:3.5.2-jdk-8 mvn -U clean package  -DskipTests -f pom.xml -P test
         docker build -t "$INSTANCE_ID"/zzxka/"$APP_NAME":latest .
