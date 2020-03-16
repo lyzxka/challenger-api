@@ -4,7 +4,6 @@
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.jdbc.Driver
         druid:
-            first:
             first:  #数据源1
                 url: jdbc:mysql://39.105.34.103:3306/challenger?useUnicode=true&characterEncoding=utf8&useSSL=false&tinyInt1isBit=true
                 username: challenger
