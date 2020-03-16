@@ -12,12 +12,12 @@ on:
 env:
   APP_NAME: challenger-api
   USERNAME: 15069115057
-  PASSWORD: 948264@zZ
+  PASSWORD: zzxka1314
   ACCESS_KEY_ID: LTAI4FjLXTNXN864GMpntENj
   ACCESS_KEY_SECRET: yDR2zExDckFbnBgePROQmERrER3GM4
   REGION_ID: cn-beijing
-  INSTANCE_ID: registry.cn-beijing.aliyuncs.com
-  LOGIN_SERVER: registry.cn-beijing.aliyuncs.com
+  INSTANCE_ID: registry-vpc.cn-beijing.aliyuncs.com
+  LOGIN_SERVER: registry-vpc.cn-beijing.aliyuncs.com
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
