@@ -53,8 +53,9 @@ jobs:
       run: |
         echo "$(pwd)"
         docker run -i --rm -v "$(pwd)":/usr/src/"$APP_NAME" -w /usr/src/"$APP_NAME" -v /root/.m2:/root/.m2  maven:3.5.2-jdk-8 mvn -U clean package  -DskipTests -f pom.xml -P test
-        docker build -t "$INSTANCE_ID"/zzxka/"$APP_NAME":latest
-        sudo docker login --username=15069115057 registry.cn-beijing.aliyuncs.com
+        docker build -t "$INSTANCE_ID"/zzxka/"$APP_NAME":latest .
+        docker login "$INSTANCE_ID" -p "$PASSWORD" -u "$USERNAME"
+#        sudo docker login --username=15069115057 registry.cn-beijing.aliyuncs.com
         echo "$PASSWORD"
         docker push "$INSTANCE_ID"/zzxka/"$APP_NAME":latest
         docker rmi --force `docker images | grep "$APP_NAME" | awk '{print $3}'`
