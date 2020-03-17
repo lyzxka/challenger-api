@@ -52,14 +52,14 @@ jobs:
     - name: Build
       run: |
         echo "$(pwd)"
-        echo "$(date)"
+        echo "run maven $(date)"
         docker run -i --rm -v "$(pwd)":/usr/src/"$APP_NAME" -w /usr/src/"$APP_NAME" -v /root/.m2:/root/.m2  maven:3.5.2-jdk-8 mvn -U clean package  -DskipTests -f pom.xml -P test
-        echo "$(date)"
+        echo "build $(date)"
         docker build -t "$INSTANCE_ID"/zzxka/"$APP_NAME":latest .
-        echo "$(date)"
+        echo "login $(date)"
         docker login "$INSTANCE_ID" -p "$PASSWORD" -u "$USERNAME"
-        echo "$(date)"
+        echo "push $(date)"
         docker push "$INSTANCE_ID"/zzxka/"$APP_NAME":latest
-        echo "$(date)"
+        echo "rmi $(date)"
         docker rmi --force `docker images | grep "$APP_NAME" | awk '{print $3}'`
-        echo "$(date)"
+        echo " finish $(date)"
