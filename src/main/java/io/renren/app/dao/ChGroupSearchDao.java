@@ -3,6 +3,7 @@ package io.renren.app.dao;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.renren.app.entity.ChGroupSearch;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.renren.app.entity.vo.GroupSearchDetailVO;
 import io.renren.app.entity.vo.GroupSearchListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,5 +23,7 @@ import java.util.Map;
 public interface ChGroupSearchDao extends BaseMapper<ChGroupSearch> {
 
     List<GroupSearchListVO> selectGroupSearchForPage(Page page, @Param("param") Map map);
+
+    GroupSearchDetailVO getGroupSearchDetail(Long groupSearchId);
 
 }

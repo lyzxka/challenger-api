@@ -21,5 +21,18 @@
         </if>
         order by gs.create_date desc
     </select>
+    <select id="getGroupSearchDetail" parameterType="long" resultType="io.renren.app.entity.vo.GroupSearchDetailVO">
+        select
+          gs.*,
+          m.title as matchName,
+          u.name as userName,
+          u.icon as userIcon,
+          g.group_no as groupNo
+        from ch_group_search as gs
+        left join ch_group as g on g.id =gs.group_id
+        left join ch_user as u on u.id =g.user_id
+        left join ch_match as m on m.id =gs.match_id
+        where gs.id=#{groupSearchId}
+    </select>
 
 </mapper>

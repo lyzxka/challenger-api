@@ -2,7 +2,10 @@ package io.renren.app.dao;
 
 import io.renren.app.entity.ChGroup;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.renren.app.entity.vo.GroupListVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ChGroupDao extends BaseMapper<ChGroup> {
-
+    List<GroupListVO> selectGroupList(String groupNo);
 }

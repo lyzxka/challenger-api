@@ -3,6 +3,7 @@ package io.renren.app.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.renren.app.entity.ChGroupSearch;
 import io.renren.app.dao.ChGroupSearchDao;
+import io.renren.app.entity.vo.GroupSearchDetailVO;
 import io.renren.app.entity.vo.GroupSearchListVO;
 import io.renren.app.service.ChGroupSearchService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -27,5 +28,10 @@ public class ChGroupSearchServiceImpl extends ServiceImpl<ChGroupSearchDao, ChGr
     public Page<GroupSearchListVO> selectGroupSearchForPage(Page page, Map map) {
         page.setRecords(baseMapper.selectGroupSearchForPage(page,map));
         return page;
+    }
+
+    @Override
+    public GroupSearchDetailVO getGroupSearchDetail(Long groupSearchId) {
+        return baseMapper.getGroupSearchDetail(groupSearchId);
     }
 }
