@@ -8,7 +8,7 @@
           u.icon as userIcon,
           m.title as matchName
         from ch_group_search as gs
-        left join ch_group as g on g.id=gs.group_id
+        left join ch_group as g on g.group_no =gs.group_no and g.user_role='1'
         left join ch_user as u on u.id =g.user_id
         left join ch_match as m on m.id=gs.match_id
         left  join ch_category as c on c.id=gs.category_id
@@ -29,7 +29,7 @@
           u.icon as userIcon,
           g.group_no as groupNo
         from ch_group_search as gs
-        left join ch_group as g on g.id =gs.group_id
+        left join ch_group as g on g.group_no =gs.group_no and g.user_role='1'
         left join ch_user as u on u.id =g.user_id
         left join ch_match as m on m.id =gs.match_id
         where gs.id=#{groupSearchId}
