@@ -1,29 +1,26 @@
 package io.renren.app.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.renren.app.annotation.Login;
 import io.renren.app.entity.ChCategory;
+import io.renren.app.entity.ChGroup;
 import io.renren.app.entity.ChMatch;
-import io.renren.app.entity.ChUser;
 import io.renren.app.form.IdForm;
 import io.renren.app.form.MatchListForm;
-import io.renren.app.service.ChCategoryService;
-import io.renren.app.service.ChMatchService;
-import io.renren.app.service.ChUserService;
+import io.renren.app.service.*;
 import io.renren.common.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.text.html.parser.Entity;
+
 
 /**
  * auther: zzxka
@@ -41,6 +38,8 @@ public class MatchController {
     ChCategoryService categoryService;
     @Autowired
     ChUserService userService;
+    @Autowired
+    ChGroupService groupService;
 
     @ApiOperation("比赛列表")
     @PostMapping("list")
@@ -56,9 +55,10 @@ public class MatchController {
         return R.ok().put("data",page.getRecords()).put("pages",page.getPages());
     }
 
+    @Login
     @ApiOperation("比赛详情")
     @PostMapping("detail")
-    public R detail(@RequestBody IdForm form){
+    public R detail(@RequestAttribute("userId")Long userId, @RequestBody IdForm form){
         log.info("比赛详情:{}",form.getObjectId());
         ChMatch match=matchService.getById(form.getObjectId());
         if(null==match){
@@ -70,7 +70,11 @@ public class MatchController {
         }
         match.setViews(match.getViews()+1);
         matchService.updateById(match);
-        return R.ok().put("match",match).put("category",chCategory.getCategoryName());
+        ChGroup group=groupService.getOne(new LambdaQueryWrapper<ChGroup>().eq(ChGroup::getUserId,userId).eq(ChGroup::getMatchId,match.getId()).notIn(ChGroup::getStatus,"3","4"));
+        return R.ok()
+                .put("match",match)
+                .put("category",chCategory.getCategoryName())
+                .put("enter",null==group?"0":"1");
     }
 
 }

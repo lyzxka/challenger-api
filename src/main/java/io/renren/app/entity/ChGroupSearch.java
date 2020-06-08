@@ -28,7 +28,7 @@ public class ChGroupSearch extends Model<ChGroupSearch> {
     /**
      * 队伍
      */
-	private Long groupId;
+	private String groupNo;
     /**
      * 标题
      */
@@ -81,12 +81,12 @@ public class ChGroupSearch extends Model<ChGroupSearch> {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getGroupId() {
-		return groupId;
+	public String getGroupNo() {
+		return groupNo;
 	}
 
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
+	public void setGroupNo(String groupNo) {
+		this.groupNo = groupNo;
 	}
 	public String getTitle() {
 		return title;
@@ -171,7 +171,7 @@ public class ChGroupSearch extends Model<ChGroupSearch> {
 	public String toString() {
 		return "ChGroupSearch{" +
 			", id=" + id +
-			", groupId=" + groupId +
+			", groupNo=" + groupNo +
 			", title=" + title +
 			", matchId=" + matchId +
 			", content=" + content +

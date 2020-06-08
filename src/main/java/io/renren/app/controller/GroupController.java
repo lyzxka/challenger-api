@@ -1,21 +1,24 @@
 package io.renren.app.controller;
 
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.renren.app.annotation.Login;
 import io.renren.app.entity.ChGroup;
 import io.renren.app.entity.ChGroupSearch;
+import io.renren.app.entity.ChMatch;
 import io.renren.app.entity.ChUser;
 import io.renren.app.entity.vo.GroupListVO;
 import io.renren.app.entity.vo.GroupSearchDetailVO;
 import io.renren.app.entity.vo.GroupSearchListVO;
-import io.renren.app.form.GroupSearchForm;
+import io.renren.app.form.GroupSearchAddForm;
+import io.renren.app.form.GroupSearchListForm;
 import io.renren.app.form.ObjectIdForm;
 import io.renren.app.service.ChGroupSearchService;
 import io.renren.app.service.ChGroupService;
+import io.renren.app.service.ChMatchService;
 import io.renren.app.service.ChUserService;
+import io.renren.app.utils.OrderNumberUtil;
 import io.renren.common.utils.R;
 import io.renren.common.validator.ValidatorUtils;
 import io.swagger.annotations.Api;
@@ -26,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +51,12 @@ public class GroupController {
     ChGroupSearchService groupSearchService;
     @Autowired
     ChUserService userService;
+    @Autowired
+    ChMatchService matchService;
 
     @ApiOperation("志友列表")
     @PostMapping("groupSearchList")
-    public R groupSearchList(@RequestBody GroupSearchForm form){
+    public R groupSearchList(@RequestBody GroupSearchListForm form){
         log.info("志友列表:{}",form.toString());
         Map param=new HashMap();
         if(StringUtils.isNotBlank(form.getMatchName())){
@@ -88,6 +94,43 @@ public class GroupController {
     }
 
     @Login
+    @ApiOperation("创建组队招募")
+    @PostMapping("groupCreate")
+    public R groupCreate(@RequestAttribute("userId")Long userId, @RequestBody GroupSearchAddForm form){
+        log.info("创建组队招募:{}",form.toString());
+        ChMatch match=matchService.getById(form.getMatchId());
+        if(null==match){
+            return R.error("比赛信息不存在");
+        }
+        ChGroup group=groupService.getOne(new LambdaQueryWrapper<ChGroup>().eq(ChGroup::getUserId,userId).eq(ChGroup::getMatchId,form.getMatchId()).notIn(ChGroup::getStatus,"3","4"));
+        if(null!=group){
+            return R.error("您已参与本比赛");
+        }
+        group=new ChGroup();
+        group.setGroupNo(OrderNumberUtil.priStrID());
+        group.setDelFlag(0);
+        group.setCreateDate(new Date());
+        group.setUserRole("1");
+        group.setUserId(userId);
+        group.setGroupName(form.getGroupName());
+        group.setStatus("2");
+        group.setCategoryId(match.getCategoryId());
+        group.setMatchId(form.getMatchId());
+        groupService.save(group);
+        ChGroupSearch groupSearch=new ChGroupSearch();
+        groupSearch.setCreateDate(new Date());
+        groupSearch.setCategoryId(match.getCategoryId());
+        groupSearch.setContent(form.getContent());
+        groupSearch.setTitle(form.getTitle());
+        groupSearch.setDelFlag(0);
+        groupSearch.setUserNum(form.getUserNum());
+        groupSearch.setMatchId(match.getId());
+        groupSearch.setGroupNo(group.getGroupNo());
+        groupSearchService.save(groupSearch);
+        return R.ok();
+    }
+
+    @Login
     @ApiOperation("报名或者取消报名")
     @PostMapping("signUpOrCancelGroupSearch")
     public R signUpOrCancelGroupSearch(@RequestAttribute("userId")Long userId,@RequestBody ObjectIdForm form){
@@ -100,14 +143,17 @@ public class GroupController {
         if(null==groupSearch){
             return R.error("志友组队信息不存在");
         }
-        ChGroup group=groupService.getById(groupSearch.getGroupId());
+        ChGroup group=groupService.getOne(new QueryWrapper<ChGroup>().eq("user_role",1).eq("group_no",groupSearch.getGroupNo()));
         if(null==group){
             return R.error("组队信息不存在");
         }
-        ChGroup myGroupInfo=groupService.getOne(new QueryWrapper<ChGroup>().eq("user_id",userId).eq("group_no",group.getGroupNo()));
+        ChGroup myGroupInfo=groupService.getOne(new QueryWrapper<ChGroup>().eq("user_id",userId).eq("group_no",groupSearch.getGroupNo()));
         if(null==myGroupInfo){
             group.setUserId(userId);
+            group.setStatus("0");
             group.setId(null);
+            group.setUserRole("2");
+            group.setCreateDate(new Date());
             groupService.save(group);
             return R.ok("报名成功，请耐心等待队长审核").put("status",myGroupInfo.getStatus());
         }

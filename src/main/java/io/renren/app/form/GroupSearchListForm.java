@@ -13,7 +13,7 @@ import lombok.ToString;
 @ApiModel
 @Data
 @ToString
-public class GroupSearchForm extends PageForm {
+public class GroupSearchListForm extends PageForm {
     @ApiModelProperty("比赛名称")
     private String matchName;
     @ApiModelProperty("类别id")
