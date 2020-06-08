@@ -68,6 +68,16 @@ public class GroupController {
         Page<GroupSearchListVO> page = groupSearchService.selectGroupSearchForPage(new Page(form.getPage(),form.getLimit()),param);
         return R.ok().put("data", page.getRecords()).put("pages", page.getPages());
     }
+    @Login
+    @ApiOperation("我的比赛")
+    @PostMapping("groupSearchListOfMy")
+    public R groupSearchListOfMy(@RequestAttribute("userId")Long userId,@RequestBody GroupSearchListForm form){
+        log.info("我的比赛:{}",form.toString());
+        Map param=new HashMap();
+        param.put("userId",userId);
+        Page<GroupSearchListVO> page = groupSearchService.selectGroupSearchForPage(new Page(form.getPage(),form.getLimit()),param);
+        return R.ok().put("data", page.getRecords()).put("pages", page.getPages());
+    }
 
     @Login
     @ApiOperation("志友组队详情")

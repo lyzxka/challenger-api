@@ -19,6 +19,9 @@
         <if test="param.categoryId !=null and param.categoryId !=''">
             and gs.category_id =#{param.categoryId}
         </if>
+        <if test="param.userId !=null and param.userId !=''">
+            and g.user_id=#{param.userId}
+        </if>
         order by gs.create_date desc
     </select>
     <select id="getGroupSearchDetail" parameterType="long" resultType="io.renren.app.entity.vo.GroupSearchDetailVO">

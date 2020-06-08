@@ -55,7 +55,16 @@ public class KnowledgeController {
         IPage<KnowledgeListVO> page=knowledgeService.selectKnowledgeForPage(map,new Page(form.getPage(),form.getLimit()));
         return R.ok().put("data",page.getRecords()).put("pages",page.getPages());
     }
-
+    @Login
+    @ApiOperation("知识列表")
+    @PostMapping("listOfMy")
+    public R listOfMy(@RequestAttribute("userId")Long userId,@RequestBody KnowledgeListForm form){
+        log.info("知识列表:{}",form.toString());
+        Map map=new HashMap();
+        map.put("userId",userId);
+        IPage<KnowledgeListVO> page=knowledgeService.selectKnowledgeForPage(map,new Page(form.getPage(),form.getLimit()));
+        return R.ok().put("data",page.getRecords()).put("pages",page.getPages());
+    }
     @Login
     @ApiOperation("发布知识")
     @PostMapping("add")

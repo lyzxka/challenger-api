@@ -17,6 +17,9 @@
               or k.title like concat('%',#{param.context},'%')
             )
         </if>
+        <if test="param.userId !=null and param.userId !=''">
+            and k.user_id=#{param.userId}
+        </if>
         order by k.create_date desc
     </select>
 
