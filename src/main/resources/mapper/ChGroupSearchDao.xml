@@ -30,7 +30,8 @@
           m.title as matchName,
           u.name as userName,
           u.icon as userIcon,
-          g.group_no as groupNo
+          g.group_no as groupNo,
+          g.user_id as userId
         from ch_group_search as gs
         left join ch_group as g on g.group_no =gs.group_no and g.user_role='1'
         left join ch_user as u on u.id =g.user_id

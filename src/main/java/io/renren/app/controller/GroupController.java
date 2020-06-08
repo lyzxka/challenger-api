@@ -11,6 +11,7 @@ import io.renren.app.entity.ChUser;
 import io.renren.app.entity.vo.GroupListVO;
 import io.renren.app.entity.vo.GroupSearchDetailVO;
 import io.renren.app.entity.vo.GroupSearchListVO;
+import io.renren.app.form.GroupAuditForm;
 import io.renren.app.form.GroupSearchAddForm;
 import io.renren.app.form.GroupSearchListForm;
 import io.renren.app.form.ObjectIdForm;
@@ -99,7 +100,7 @@ public class GroupController {
         Map data=new HashMap();
         data.put("groupSearch",groupSearch);
         data.put("groupList",groupList);
-
+        data.put("master",userId.equals(groupSearch.getUserId()));
         return R.ok(data);
     }
 
@@ -165,7 +166,7 @@ public class GroupController {
             group.setUserRole("2");
             group.setCreateDate(new Date());
             groupService.save(group);
-            return R.ok("报名成功，请耐心等待队长审核").put("status",myGroupInfo.getStatus());
+            return R.ok("报名成功，请耐心等待队长审核").put("status",group.getStatus());
         }
         if(myGroupInfo.getStatus().equals("1")){
             myGroupInfo.setStatus("4");
@@ -178,6 +179,20 @@ public class GroupController {
             groupService.updateById(myGroupInfo);
             return R.ok("报名成功，请耐心等待队长审核").put("status",myGroupInfo.getStatus());
         }
+    }
+
+    @Login
+    @ApiOperation("审核")
+    @PostMapping("audit")
+    public R audit(@RequestAttribute("userId")Long userId, @RequestBody GroupAuditForm form){
+        ChGroup group=groupService.getById(form.getGroupId());
+        if(1==form.getAudit()){
+            group.setStatus("2");
+        }else{
+            group.setStatus("3");
+        }
+        groupService.updateById(group);
+        return R.ok();
     }
 
 }

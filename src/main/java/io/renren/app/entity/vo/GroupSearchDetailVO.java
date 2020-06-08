@@ -15,4 +15,5 @@ public class GroupSearchDetailVO extends ChGroupSearch {
     private String matchName;
     private String groupNo;
     private String signUpStatus;
+    private Long userId;
 }

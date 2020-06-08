@@ -8,7 +8,7 @@
         u.icon as userIcon
         from ch_group as g
         left join ch_user as u on u.id =g.user_id
-        where g.del_flag=0 and g.group_no=#{groupNo}
+        where g.del_flag=0 and g.group_no=#{groupNo} and g.user_role='2'
         order by g.status asc
     </select>
 
